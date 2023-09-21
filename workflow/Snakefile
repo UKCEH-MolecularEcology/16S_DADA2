@@ -1,0 +1,69 @@
+##################################################
+# MODULES
+import os
+import re
+import pandas
+
+##################################################
+# CONFIG
+
+# Validation
+# from snakemake.utils import validate
+# validate(config, srcdir("../../schemas/config.schema.yaml"))
+
+# Paths
+SRC_DIR = srcdir("scripts")
+ENV_DIR = srcdir("envs")
+DATA_DIR = config["data_dir"]
+RESULTS_DIR = config["results_dir"]
+DBS_DIR = config["dbsdir"]
+
+# default executable for snakmake
+shell.executable("bash")
+
+# read in sample table and save in config object
+config["samples_meta"] = os.path.abspath(config["samples"]) # absolute path to sample metadata
+config["samples"] = pandas.read_csv(config["samples"], header=0, index_col=0, sep="\t")[["R1","R2"]].to_dict(orient="index")
+
+# working directory
+workdir:
+    config["workdir"]
+
+SAMPLES = config["samples"].keys()
+
+##################################################
+# RULES
+
+include:
+    "rules/fastq.smk"
+
+include:
+    "rules/asv.smk"
+
+# "Master" rule
+rule all:
+    input:
+        # FASTQ
+        expand(
+            os.path.join(RESULTS_DIR, "multiqc/fastqc/{ftype}/multiqc_report.html"),
+            ftype=["raw", "cutadapt_primers", "cutadapt_adapters"]
+        ),
+        expand(
+            os.path.join(RESULTS_DIR, "multiqc/fastq/{ftype}/multiqc_report.html"),
+            ftype=["cutadapt_primers", "cutadapt_adapters"]
+        ),
+        # ASVs
+        [
+            os.path.join(RESULTS_DIR, "dada2/errormod.pdf"),
+            os.path.join(RESULTS_DIR, "dada2/ASV.counts.tsv"), 
+            os.path.join(RESULTS_DIR, "dada2/ASV.fasta"), 
+            os.path.join(RESULTS_DIR, "dada2/ASV.tax.tsv"), 
+            os.path.join(RESULTS_DIR, "dada2/tree.rds"),
+            os.path.join(RESULTS_DIR, "dada2/ASV.tree"),
+            os.path.join(RESULTS_DIR, "dada2/ASV_seqs.tsv"),
+            os.path.join(RESULTS_DIR, "dada2/ASV.stats.tsv"),
+            os.path.join(RESULTS_DIR, "dada2/stats.pdf"),
+            os.path.join(RESULTS_DIR, "dada2/ASV.krona.html"),
+            os.path.join(RESULTS_DIR, "dada2/ASV.phyloseq.pdf"),
+            os.path.join(RESULTS_DIR, "dada2/phyloseq.rds")
+        ]

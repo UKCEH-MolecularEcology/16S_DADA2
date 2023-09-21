@@ -1,0 +1,18 @@
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - r-base=4.0.3
+  - r-testit
+  - r-reshape2
+  - r-scales
+  - r-ggplot2
+  - r-ggsci
+  - r-ggrepel
+  - r-dplyr
+  - r-upsetr
+  - r-pheatmap
+  - r-viridis
+  - bioconductor-phyloseq=1.34.0
+  - bioconductor-dada2=1.18.0

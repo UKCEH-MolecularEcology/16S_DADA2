@@ -1,0 +1,59 @@
+###########################################################
+# STEPS
+steps: ""
+
+###########################################################
+# INPUT
+# Directory where the data files are
+data_dir: "/hdd0/susbus/nf_core/data/hebe_16S"
+
+# Directory for the results
+results_dir: "/hdd0/susbus/nf_core/data/hebe_16S/16S_DADA2_results"
+
+# working directory (will include links to raw data, logs, results)
+workdir: "/ssd0/susbus/nf_core/data/hebe_16S"
+
+# internal databases, i.e. created by the pipeline (external databases should be defined elsewhere)
+dbsdir: "/hdd0/susbus/nf_core/data/hebe_16S/16S_DADA2_results"
+
+# samples: unique sample ID and R1/R2 FASTQ files (absolute paths)
+samples: "config/hebe_sample_metadata.tsv"
+
+# primer sequences
+primer:
+  forward: "TCGTCGGCAGCGTCAGATGTGTATAAGAGACAGCCTACGGGNGGCWGCAG"
+  forward_revcompl: "CTGCWGCCNCCCGTAGGCTGTCTCTTATACACATCTGACGCTGCCGACGA"
+  reverse: "GTCTCGTGGGCTCGGAGATGTGTATAAGAGACAGGACTACHVGGGTATCTAATCC"
+  reverse_revcompl: "GGATTAGATACCCBDGTAGTCCTGTCTCTTATACACATCTCCGAGCCCACGAGAC"
+
+# adapter sequences
+adapter:
+  forward1: "AGATCGGAAGAG"
+  forward2: "TGGAATTCTCGG"
+  revcompl1: "CTCTTCCGATCT"
+  revcompl2: "CCGAGAATTCCA"
+
+# https://www.bioinformatics.babraham.ac.uk/projects/fastqc/
+fastqc:
+  threads: 2
+
+# https://cutadapt.readthedocs.io/en/stable/
+cutadapt:
+  threads: 4
+  min_length: 200
+
+# https://www.bioconductor.org/packages/release/bioc/html/dada2.html
+dada2:
+  fastq:
+    threads: 36
+    truncLen: [200, 200]
+    minLen: 150
+  asv:
+    threads_single: 4
+    threads: 12
+    pool: true # TRUE or pseudo  # TODO
+    minOverlap: 31  # see wiki for details
+  # https://zenodo.org/record/3731176 (SILVA v.138); https://zenodo.org/record/1172783#.XlZ__CmYXMJ (SILVA v.132)
+    tax: "https://zenodo.org/record/3731176/files/silva_nr_v138_train_set.fa.gz"  #"https://zenodo.org/record/1172783/files/silva_nr_v132_train_set.fa.gz"
+  tree:
+    threads: 24
