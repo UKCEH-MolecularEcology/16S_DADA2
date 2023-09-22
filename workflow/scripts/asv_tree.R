@@ -59,7 +59,7 @@ seqtab_cols <- paste0("ASV_", seq(1:ncol(seqtab)))
 seqs <- getSequences(seqtab)
 names(seqs) <- seqtab_cols # This propagates to the tip labels of the tree
 # Assuming 'seqs' is a character vector
-seqs_df <- as.data.frame(seqs) # seqs_df <- data.frame(ASV=rownames(seqs), Sequence=seqs)   # writing the seqs with ASV name to df
+seqs_df <- DNAStringSet(sapply(seqs, `[[`, 1)) # from https://www.biostars.org/p/115192/
 seqs_df
 alignment <- AlignSeqs(DNAStringSet(seqs), anchor=NA)
 
@@ -80,7 +80,7 @@ fitGTR <- optim.pml(fitGTR, model="GTR", optInv=TRUE, optGamma=TRUE,
 ## SAVE DATA
 print("Saving data")
 # Sequence file
-write.table(seqs_df, file=snakemake@output@seq, row.names=TRUE)
+writeXStringSet(seqs_df, file=snakemake@output@seq, row.names=TRUE)
 # Tree file
 write.tree(fitGTR$tree, file=snakemake@output$tree)
 # RDS

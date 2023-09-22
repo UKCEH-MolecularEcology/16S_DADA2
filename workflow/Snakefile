@@ -60,7 +60,7 @@ rule all:
             os.path.join(RESULTS_DIR, "dada2/ASV.tax.tsv"), 
             os.path.join(RESULTS_DIR, "dada2/tree.rds"),
             os.path.join(RESULTS_DIR, "dada2/ASV.tree"),
-            os.path.join(RESULTS_DIR, "dada2/ASV_seqs.tsv"),
+            os.path.join(RESULTS_DIR, "dada2/ASV_seqs.fa"),
             os.path.join(RESULTS_DIR, "dada2/ASV.stats.tsv"),
             os.path.join(RESULTS_DIR, "dada2/stats.pdf"),
             os.path.join(RESULTS_DIR, "dada2/ASV.krona.html"),
