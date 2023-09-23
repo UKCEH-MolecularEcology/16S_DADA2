@@ -23,12 +23,9 @@ suppressMessages(library(phangorn)) # tree building
 source(snakemake@params$utils)
 
 ## ARGS
-#for(arg_name in c('minOverlap')){
-#    testit::assert(sprintf("Argument %s must be > 0", arg_name), all(snakemake@config$dada2$asv[[arg_name]] > 0))
-#}
-#for(fname in snakemake@input){
-#    testit::assert(sprintf("Could not find file %s", fname), file.exists(fname))
-#}
+for(fname in snakemake@input){
+    testit::assert(sprintf("Could not find file %s", fname), file.exists(fname))
+}
 #THREADS <- ifelse(snakemake@threads==1, FALSE, snakemake@threads)
 
 ## INFO
@@ -79,8 +76,6 @@ fitGTR <- optim.pml(fitGTR, model="GTR", optInv=TRUE, optGamma=TRUE,
 
 ## SAVE DATA
 print("Saving data")
-# Sequence file
-writeXStringSet(seqs_df, file=snakemake@output@seq, row.names=TRUE)
 # Tree file
 write.tree(fitGTR$tree, file=snakemake@output$tree)
 # RDS

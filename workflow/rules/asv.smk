@@ -81,7 +81,6 @@ rule asv_tree:
         rds=os.path.join(RESULTS_DIR, "dada2/ASV.rds")
     output:
         rds=os.path.join(RESULTS_DIR, "dada2/tree.rds"),
-        seq=os.path.join(RESULTS_DIR, "dada2/ASV_seqs.fa"),
         tree=os.path.join(RESULTS_DIR, "dada2/ASV.tree")
     log:
         os.path.join(RESULTS_DIR, "dada2/tree.log")
