@@ -23,9 +23,6 @@ suppressMessages(library(phangorn)) # tree building
 source(snakemake@params$utils)
 
 ## ARGS
-for(fname in snakemake@input){
-    testit::assert(sprintf("Could not find file %s", fname), file.exists(fname))
-}
 #THREADS <- ifelse(snakemake@threads==1, FALSE, snakemake@threads)
 
 ## INFO
